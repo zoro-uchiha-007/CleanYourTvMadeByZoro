@@ -1,0 +1,35 @@
+# Gradle and Build Output
+.gradle/
+build/
+**/build/
+**/.gradle/
+
+# Android Studio / IntelliJ IDE
+.idea/
+*.iml
+.DS_Store
+
+# Local SDK and Keystore Secrets
+local.properties
+keystore.properties
+*.jks
+*.keystore
+
+# Built Binaries and Archives
+*.apk
+*.aab
+*.zip
+*.tar.gz
+*.7z
+*.rar
+
+# Test, Capture, Diagnostic and Log Artifacts
+test_run/
+captures/
+evidence/
+*.log
+scratch/
+temp_*/
+
+# User Custom Wallpapers & Media
+launcher/app/src/main/assets/wallpapers/custom/

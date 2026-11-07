@@ -1,0 +1,1340 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FF000000">
+
+    <!-- Brand New Homescreen Wallpaper (5K downsampled to 1080p, no dark tint) -->
+    <ImageView
+        android:id="@+id/wallpaperView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:importantForAccessibility="no" />
+
+    <!-- Bottom Scrim Overlay for Wallpaper Visibility Safety -->
+    <View
+        android:id="@+id/wallpaperScrimView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bottom_scrim_gradient"
+        android:alpha="0"
+        android:importantForAccessibility="no" />
+
+    <!-- Dark Dim Overlay over Wallpaper (activates on character focus) -->
+    <View
+        android:id="@+id/wallpaperDimView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000000"
+        android:alpha="0"
+        android:importantForAccessibility="no" />
+
+    <!-- Canvas drawing layer positioned behind UI -->
+    <com.gathin.tvhome.EffectsCanvasView
+        android:id="@+id/effectsCanvas"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- UI Container -->
+    <FrameLayout
+        android:id="@+id/uiContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipChildren="false"
+        android:clipToPadding="false">
+
+        <!-- Top Bar: Clock + Date + Weather on left, Wi-Fi + Inputs + Settings on right -->
+        <LinearLayout
+            android:id="@+id/topBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:paddingStart="48dp"
+            android:paddingEnd="48dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="8dp">
+
+            <!-- Top Left: Vertical Stack: Time (largest), Date below it, Weather below date -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextClock
+                    android:id="@+id/clock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/sf_pro_bold"
+                    android:textSize="38sp"
+                    android:textColor="#FF000000"
+                    android:format12Hour="h:mm a"
+                    android:format24Hour="HH:mm"
+                    android:includeFontPadding="false" />
+
+                <TextClock
+                    android:id="@+id/homeDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:fontFamily="@font/sf_pro_medium"
+                    android:textSize="14sp"
+                    android:textColor="#CC000000"
+                    android:format12Hour="EEEE, MMMM d"
+                    android:format24Hour="EEEE, d MMMM"
+                    android:includeFontPadding="false" />
+
+                <LinearLayout
+                    android:id="@+id/weatherContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="4dp">
+
+                    <ImageView
+                        android:id="@+id/weatherIcon"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_weather"
+                        android:tint="#FF000000"
+                        android:importantForAccessibility="no" />
+
+                    <TextView
+                        android:id="@+id/weatherTemp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:fontFamily="@font/sf_pro_medium"
+                        android:textSize="14sp"
+                        android:textColor="#FF000000"
+                        android:includeFontPadding="false"
+                        android:text="--°C" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <!-- Top Right: Compact indicators and 40dp icon capsules -->
+            <LinearLayout
+                android:id="@+id/topIconsContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:gravity="center_vertical">
+
+                <!-- RAM Indicator (Read-only Capsule Pill, Far Left) -->
+                <TextView
+                    android:id="@+id/pillRam"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:minWidth="68dp"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:gravity="center"
+                    android:background="@drawable/top_btn_unfocused"
+                    android:fontFamily="@font/outfit"
+                    android:textSize="12sp"
+                    android:textColor="#E6FFFFFF"
+                    android:text="--/-- GB"
+                    android:focusable="false"
+                    android:clickable="false" />
+
+                <!-- Storage Warning Capsule (Focusable, visible only when low storage) -->
+                <TextView
+                    android:id="@+id/pillStorage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:minHeight="40dp"
+                    android:layout_marginStart="12dp"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:gravity="center"
+                    android:background="@drawable/top_btn_unfocused"
+                    android:fontFamily="@font/outfit"
+                    android:textSize="12sp"
+                    android:textColor="#FFFFB300"
+                    android:text="Low storage"
+                    android:defaultFocusHighlightEnabled="false"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:visibility="gone" />
+
+                <!-- Wi-Fi Button: expands to show label on focus -->
+                <LinearLayout
+                    android:id="@+id/btnWifi"
+                    android:layout_width="wrap_content"
+                    android:minWidth="40dp"
+                    android:layout_height="40dp"
+                    android:minHeight="40dp"
+                    android:layout_marginStart="12dp"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:background="@drawable/top_btn_unfocused"
+                    android:defaultFocusHighlightEnabled="false"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:contentDescription="Wi-Fi">
+                    <ImageView
+                        android:id="@+id/iconWifi"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_wifi"
+                        android:tint="#FFFFFFFF" />
+                    <TextView
+                        android:id="@+id/textWifi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:fontFamily="@font/outfit"
+                        android:textSize="12sp"
+                        android:textColor="#FFFFFFFF"
+                        android:text="Connected to Wi-Fi"
+                        android:maxWidth="130dp"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:visibility="visible" />
+                </LinearLayout>
+
+                <!-- Brightness & Display Button: expands to show label on focus -->
+                <LinearLayout
+                    android:id="@+id/btnBrightness"
+                    android:layout_width="wrap_content"
+                    android:minWidth="40dp"
+                    android:layout_height="40dp"
+                    android:minHeight="40dp"
+                    android:layout_marginStart="12dp"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:background="@drawable/top_btn_unfocused"
+                    android:defaultFocusHighlightEnabled="false"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:contentDescription="Brightness and Wallpaper">
+                    <ImageView
+                        android:id="@+id/iconBrightness"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_brightness"
+                        android:tint="#FFFFFFFF" />
+                    <TextView
+                        android:id="@+id/textBrightness"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:fontFamily="@font/outfit"
+                        android:textSize="12sp"
+                        android:textColor="#FFFFFFFF"
+                        android:text="Display"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+                <!-- Inputs Button: expands to show label on focus -->
+                <LinearLayout
+                    android:id="@+id/btnInputs"
+                    android:layout_width="wrap_content"
+                    android:minWidth="40dp"
+                    android:layout_height="40dp"
+                    android:minHeight="40dp"
+                    android:layout_marginStart="12dp"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:background="@drawable/top_btn_unfocused"
+                    android:defaultFocusHighlightEnabled="false"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:contentDescription="Inputs">
+                    <ImageView
+                        android:id="@+id/iconInputs"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_input"
+                        android:tint="#FFFFFFFF" />
+                    <TextView
+                        android:id="@+id/textInputs"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:fontFamily="@font/outfit"
+                        android:textSize="12sp"
+                        android:textColor="#FFFFFFFF"
+                        android:text="Inputs"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+                <!-- Lock Screen Button: expands to show label on focus -->
+                <LinearLayout
+                    android:id="@+id/btnLock"
+                    android:layout_width="wrap_content"
+                    android:minWidth="40dp"
+                    android:layout_height="40dp"
+                    android:minHeight="40dp"
+                    android:layout_marginStart="12dp"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:background="@drawable/top_btn_unfocused"
+                    android:defaultFocusHighlightEnabled="false"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:contentDescription="Lock Screen">
+                    <ImageView
+                        android:id="@+id/iconLock"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_lock"
+                        android:tint="#FFFFFFFF" />
+                    <TextView
+                        android:id="@+id/textLock"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:fontFamily="@font/outfit"
+                        android:textSize="12sp"
+                        android:textColor="#FFFFFFFF"
+                        android:text="Lock"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+                <!-- Sleep Button: expands to show label on focus -->
+                <LinearLayout
+                    android:id="@+id/btnSleep"
+                    android:layout_width="wrap_content"
+                    android:minWidth="40dp"
+                    android:layout_height="40dp"
+                    android:minHeight="40dp"
+                    android:layout_marginStart="12dp"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:background="@drawable/top_btn_unfocused"
+                    android:defaultFocusHighlightEnabled="false"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:contentDescription="Sleep Timer">
+                    <ImageView
+                        android:id="@+id/iconSleep"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_sleep"
+                        android:tint="#FFFFFFFF" />
+                    <TextView
+                        android:id="@+id/textSleep"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:fontFamily="@font/outfit"
+                        android:textSize="12sp"
+                        android:textColor="#FFFFFFFF"
+                        android:text="Sleep"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+                <!-- Settings Button: expands to show label on focus -->
+                <LinearLayout
+                    android:id="@+id/btnSettings"
+                    android:layout_width="wrap_content"
+                    android:minWidth="40dp"
+                    android:layout_height="40dp"
+                    android:minHeight="40dp"
+                    android:layout_marginStart="12dp"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:background="@drawable/top_btn_unfocused"
+                    android:defaultFocusHighlightEnabled="false"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:contentDescription="Settings">
+                    <ImageView
+                        android:id="@+id/iconSettings"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_settings"
+                        android:tint="#FFFFFFFF" />
+                    <TextView
+                        android:id="@+id/textSettings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:fontFamily="@font/outfit"
+                        android:textSize="12sp"
+                        android:textColor="#FFFFFFFF"
+                        android:text="Settings"
+                        android:visibility="gone" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Vertical Scrollable TV Sections -->
+        <ScrollView
+            android:id="@+id/mainScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="75dp"
+            android:fillViewport="true"
+            android:scrollbars="none"
+            android:clipChildren="false"
+            android:clipToPadding="false">
+
+            <LinearLayout
+                android:id="@+id/contentLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:paddingBottom="60dp">
+
+                <!-- SECTION 1: FLOATING APP DOCK -->
+                <LinearLayout
+                    android:id="@+id/dockSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="26dp">
+
+                    <TextView
+                        android:id="@+id/dockTagline"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="20dp"
+                        android:paddingStart="24dp"
+                        android:paddingEnd="24dp"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:background="@drawable/capsule_black_bg"
+                        android:fontFamily="@font/sf_pro_bold"
+                        android:textSize="20sp"
+                        android:textColor="#FFFFFFFF"
+                        android:visibility="invisible"
+                        android:alpha="0"
+                        android:text="Arambikalangala!" />
+
+                    <LinearLayout
+                        android:id="@+id/dockRow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center">
+
+                        <!-- App 0: Sun NXT -->
+                        <LinearLayout
+                            android:id="@+id/dockItem0"
+                            android:layout_width="114dp"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:focusable="true"
+                            android:clickable="true">
+                            <ImageView
+                                android:id="@+id/logo0"
+                                android:layout_width="68dp"
+                                android:layout_height="68dp"
+                                android:scaleType="fitCenter"
+                                android:src="@drawable/icon_sunnxt" />
+                            <TextView
+                                android:id="@+id/name0"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:paddingStart="12dp"
+                                android:paddingEnd="12dp"
+                                android:paddingTop="3dp"
+                                android:paddingBottom="3dp"
+                                android:background="@drawable/label_pill_black_bg"
+                                android:fontFamily="@font/sf_pro_medium"
+                                android:textSize="12sp"
+                                android:textColor="#FFFFFFFF"
+                                android:alpha="0"
+                                android:text="Sun NXT" />
+                        </LinearLayout>
+
+                        <!-- App 1: MX Player -->
+                        <LinearLayout
+                            android:id="@+id/dockItem1"
+                            android:layout_width="114dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="14dp"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:focusable="true"
+                            android:clickable="true">
+                            <ImageView
+                                android:id="@+id/logo1"
+                                android:layout_width="68dp"
+                                android:layout_height="68dp"
+                                android:scaleType="fitCenter"
+                                android:src="@drawable/icon_mxplayer" />
+                            <TextView
+                                android:id="@+id/name1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:paddingStart="12dp"
+                                android:paddingEnd="12dp"
+                                android:paddingTop="3dp"
+                                android:paddingBottom="3dp"
+                                android:background="@drawable/label_pill_black_bg"
+                                android:fontFamily="@font/sf_pro_medium"
+                                android:textSize="12sp"
+                                android:textColor="#FFFFFFFF"
+                                android:alpha="0"
+                                android:text="MX Player" />
+                        </LinearLayout>
+
+                        <!-- App 2: Hotstar ("Let's go hotstar") -->
+                        <LinearLayout
+                            android:id="@+id/dockItem2"
+                            android:layout_width="114dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="14dp"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:focusable="true"
+                            android:clickable="true">
+                            <ImageView
+                                android:id="@+id/logo2"
+                                android:layout_width="68dp"
+                                android:layout_height="68dp"
+                                android:scaleType="fitCenter"
+                                android:src="@drawable/icon_hotstar" />
+                            <TextView
+                                android:id="@+id/name2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:paddingStart="12dp"
+                                android:paddingEnd="12dp"
+                                android:paddingTop="3dp"
+                                android:paddingBottom="3dp"
+                                android:background="@drawable/label_pill_black_bg"
+                                android:fontFamily="@font/sf_pro_medium"
+                                android:textSize="12sp"
+                                android:textColor="#FFFFFFFF"
+                                android:alpha="0"
+                                android:text="Hotstar" />
+                        </LinearLayout>
+
+                        <!-- App 3: YouTube -->
+                        <LinearLayout
+                            android:id="@+id/dockItem3"
+                            android:layout_width="114dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="14dp"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:focusable="true"
+                            android:clickable="true">
+                            <ImageView
+                                android:id="@+id/logo3"
+                                android:layout_width="68dp"
+                                android:layout_height="68dp"
+                                android:scaleType="fitCenter"
+                                android:src="@drawable/icon_youtube" />
+                            <TextView
+                                android:id="@+id/name3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:paddingStart="12dp"
+                                android:paddingEnd="12dp"
+                                android:paddingTop="3dp"
+                                android:paddingBottom="3dp"
+                                android:background="@drawable/label_pill_black_bg"
+                                android:fontFamily="@font/sf_pro_medium"
+                                android:textSize="12sp"
+                                android:textColor="#FFFFFFFF"
+                                android:alpha="0"
+                                android:text="YouTube" />
+                        </LinearLayout>
+
+                        <!-- App 4: NetMirror -->
+                        <LinearLayout
+                            android:id="@+id/dockItem4"
+                            android:layout_width="114dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="14dp"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:focusable="true"
+                            android:clickable="true">
+                            <ImageView
+                                android:id="@+id/logo4"
+                                android:layout_width="68dp"
+                                android:layout_height="68dp"
+                                android:scaleType="fitCenter"
+                                android:src="@drawable/icon_netmirror" />
+                            <TextView
+                                android:id="@+id/name4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:paddingStart="12dp"
+                                android:paddingEnd="12dp"
+                                android:paddingTop="3dp"
+                                android:paddingBottom="3dp"
+                                android:background="@drawable/label_pill_black_bg"
+                                android:fontFamily="@font/sf_pro_medium"
+                                android:textSize="12sp"
+                                android:textColor="#FFFFFFFF"
+                                android:alpha="0"
+                                android:text="NetMirror" />
+                        </LinearLayout>
+
+                        <!-- App 5: Cloudstream -->
+                        <LinearLayout
+                            android:id="@+id/dockItem5"
+                            android:layout_width="114dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="14dp"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:focusable="true"
+                            android:clickable="true">
+                            <ImageView
+                                android:id="@+id/logo5"
+                                android:layout_width="68dp"
+                                android:layout_height="68dp"
+                                android:scaleType="fitCenter"
+                                android:src="@drawable/icon_cloudstream" />
+                            <TextView
+                                android:id="@+id/name5"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:paddingStart="12dp"
+                                android:paddingEnd="12dp"
+                                android:paddingTop="3dp"
+                                android:paddingBottom="3dp"
+                                android:background="@drawable/label_pill_black_bg"
+                                android:fontFamily="@font/sf_pro_medium"
+                                android:textSize="12sp"
+                                android:textColor="#FFFFFFFF"
+                                android:alpha="0"
+                                android:text="Cloudstream" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- SECTION 2: MY FAVOURITES (ALL 6 CHARACTERS IN SAME ROW) -->
+                <LinearLayout
+                    android:id="@+id/favSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="30dp">
+
+                    <!-- Title Header above characters (Black capsule background with white font, no app icon per user request) -->
+                    <LinearLayout
+                        android:id="@+id/favHeader"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:background="@drawable/capsule_black_bg"
+                        android:layout_marginBottom="12dp"
+                        android:visibility="invisible"
+                        android:alpha="0">
+
+                        <ImageView
+                            android:id="@+id/favAppLogo"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/favTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/sf_pro_bold"
+                            android:textSize="18sp"
+                            android:textColor="#FFFFFFFF"
+                            android:text="One Piece (Zoro)" />
+                    </LinearLayout>
+
+                    <!-- Characters Group: All 6 on the SAME single horizontal row -->
+                    <FrameLayout
+                        android:id="@+id/favGroupContainer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clipChildren="false"
+                        android:clipToPadding="false">
+
+                        <!-- Localized Aura Glow (Hidden per user request: no round colored circle bg) -->
+                        <View
+                            android:id="@+id/favGlowView"
+                            android:layout_width="160dp"
+                            android:layout_height="160dp"
+                            android:background="@drawable/halo_glow"
+                            android:visibility="gone" />
+
+                        <!-- Single Horizontal Row for all 6 characters: Enlarged to 335dp height to cover TV screen without clipping -->
+                        <LinearLayout
+                            android:id="@+id/favRow"
+                            android:layout_width="wrap_content"
+                            android:layout_height="335dp"
+                            android:orientation="horizontal"
+                            android:clipChildren="false"
+                            android:clipToPadding="false"
+                            android:gravity="bottom|center_horizontal">
+
+                            <!-- 0: Zoro -->
+                            <ImageView
+                                android:id="@+id/char_zoro"
+                                android:layout_width="165dp"
+                                android:layout_height="290dp"
+                                android:scaleType="fitCenter"
+                                android:src="@drawable/char_zoro_bw"
+                                android:focusable="true"
+                                android:clickable="true" />
+
+                            <!-- 1: Byakuya -->
+                            <ImageView
+                                android:id="@+id/char_byakuya"
+                                android:layout_width="145dp"
+                                android:layout_height="290dp"
+                                android:layout_marginStart="-10dp"
+                                android:scaleType="fitCenter"
+                                android:src="@drawable/char_byakuya_bw"
+                                android:focusable="true"
+                                android:clickable="true" />
+
+                            <!-- 2: Dom -->
+                            <ImageView
+                                android:id="@+id/char_dom"
+                                android:layout_width="120dp"
+                                android:layout_height="290dp"
+                                android:layout_marginStart="-8dp"
+                                android:scaleType="fitCenter"
+                                android:src="@drawable/char_dom_bw"
+                                android:focusable="true"
+                                android:clickable="true" />
+
+                            <!-- 3: Spider-Man (Expanded width so crouching aspect ratio matches height of others) -->
+                            <ImageView
+                                android:id="@+id/char_spiderman"
+                                android:layout_width="230dp"
+                                android:layout_height="290dp"
+                                android:layout_marginStart="-16dp"
+                                android:scaleType="fitCenter"
+                                android:src="@drawable/char_spiderman_bw"
+                                android:focusable="true"
+                                android:clickable="true" />
+
+                            <!-- 4: Iron Man -->
+                            <ImageView
+                                android:id="@+id/char_ironman"
+                                android:layout_width="135dp"
+                                android:layout_height="290dp"
+                                android:layout_marginStart="-16dp"
+                                android:scaleType="fitCenter"
+                                android:src="@drawable/char_ironman_bw"
+                                android:focusable="true"
+                                android:clickable="true" />
+
+                            <!-- 5: Vijay JD -->
+                            <ImageView
+                                android:id="@+id/char_vijay"
+                                android:layout_width="160dp"
+                                android:layout_height="290dp"
+                                android:layout_marginStart="-12dp"
+                                android:scaleType="fitCenter"
+                                android:src="@drawable/char_vijay_bw"
+                                android:focusable="true"
+                                android:clickable="true" />
+                        </LinearLayout>
+                    </FrameLayout>
+                </LinearLayout>
+
+                <!-- SECTION 3: MOOD POSTER CARDS (SPIN ONLY ON OK) -->
+                <LinearLayout
+                    android:id="@+id/moodSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="28dp">
+
+                    <TextView
+                        android:id="@+id/moodHeaderPrompt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="24dp"
+                        android:paddingEnd="24dp"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:background="@drawable/capsule_black_bg"
+                        android:fontFamily="@font/sf_pro_bold"
+                        android:textSize="18sp"
+                        android:textColor="#FFFFFFFF"
+                        android:text="Don't have time to browse?" />
+
+                    <!-- Mood Deck Category Title Pill Badge with High-Contrast Background -->
+                    <LinearLayout
+                        android:id="@+id/moodBadgePill"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/category_badge_bg"
+                        android:paddingStart="18dp"
+                        android:paddingEnd="18dp">
+
+                        <TextView
+                            android:id="@+id/moodNameText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/sf_pro_bold"
+                            android:textSize="16sp"
+                            android:textColor="#FFFFFFFF"
+                            android:text="Trending Hits" />
+
+                        <TextView
+                            android:id="@+id/moodTitlesCountText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:fontFamily="@font/sf_pro_medium"
+                            android:textSize="13sp"
+                            android:textColor="#B3FFFFFF"
+                            android:text="• 8 titles" />
+                    </LinearLayout>
+
+                    <!-- Pure Floating Poster Cards Container (Clean Title Cards, No Posters) -->
+                    <FrameLayout
+                        android:id="@+id/moodDeckContainer"
+                        android:layout_width="480dp"
+                        android:layout_height="260dp"
+                        android:layout_marginTop="10dp"
+                        android:clipChildren="false"
+                        android:clipToPadding="false"
+                        android:focusable="true"
+                        android:clickable="true">
+
+                        <!-- Fanned Title Cards (Only Names, No Image Posters) -->
+                        <FrameLayout
+                            android:id="@+id/fannedPostersGroup"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:clipChildren="false">
+
+                            <!-- Left Card (-14 deg) -->
+                            <FrameLayout
+                                android:id="@+id/cardLeftFrame"
+                                android:layout_width="110dp"
+                                android:layout_height="165dp"
+                                android:layout_gravity="center"
+                                android:translationX="-95dp"
+                                android:rotation="-14"
+                                android:elevation="2dp"
+                                android:background="@drawable/card_name_surface"
+                                android:padding="8dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical"
+                                    android:gravity="center">
+
+                                    <TextView
+                                        android:id="@+id/cardLeftType"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/sf_pro_bold"
+                                        android:textSize="10sp"
+                                        android:textColor="#80FFFFFF"
+                                        android:letterSpacing="0.05"
+                                        android:text="TITLE" />
+
+                                    <TextView
+                                        android:id="@+id/cardLeftTitle"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="8dp"
+                                        android:gravity="center"
+                                        android:fontFamily="@font/sf_pro_bold"
+                                        android:textSize="13sp"
+                                        android:textColor="#FFFFFFFF"
+                                        android:text="Attack on Titan"
+                                        android:maxLines="3"
+                                        android:ellipsize="end" />
+                                </LinearLayout>
+                            </FrameLayout>
+
+                            <!-- Right Card (+14 deg) -->
+                            <FrameLayout
+                                android:id="@+id/cardRightFrame"
+                                android:layout_width="110dp"
+                                android:layout_height="165dp"
+                                android:layout_gravity="center"
+                                android:translationX="95dp"
+                                android:rotation="14"
+                                android:elevation="2dp"
+                                android:background="@drawable/card_name_surface"
+                                android:padding="8dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical"
+                                    android:gravity="center">
+
+                                    <TextView
+                                        android:id="@+id/cardRightType"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/sf_pro_bold"
+                                        android:textSize="10sp"
+                                        android:textColor="#80FFFFFF"
+                                        android:letterSpacing="0.05"
+                                        android:text="TITLE" />
+
+                                    <TextView
+                                        android:id="@+id/cardRightTitle"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="8dp"
+                                        android:gravity="center"
+                                        android:fontFamily="@font/sf_pro_bold"
+                                        android:textSize="13sp"
+                                        android:textColor="#FFFFFFFF"
+                                        android:text="Deadpool &amp; Wolverine"
+                                        android:maxLines="3"
+                                        android:ellipsize="end" />
+                                </LinearLayout>
+                            </FrameLayout>
+
+                            <!-- Center Focused Card -->
+                            <FrameLayout
+                                android:id="@+id/cardCenterFrame"
+                                android:layout_width="130dp"
+                                android:layout_height="195dp"
+                                android:layout_gravity="center"
+                                android:elevation="8dp"
+                                android:background="@drawable/card_name_surface"
+                                android:padding="12dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical"
+                                    android:gravity="center">
+
+                                    <TextView
+                                        android:id="@+id/cardCenterBadge"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:background="@drawable/label_pill_black_bg"
+                                        android:paddingStart="8dp"
+                                        android:paddingEnd="8dp"
+                                        android:paddingTop="2dp"
+                                        android:paddingBottom="2dp"
+                                        android:fontFamily="@font/sf_pro_bold"
+                                        android:textSize="10sp"
+                                        android:textColor="#FFFFD700"
+                                        android:text="★ TOP PICK" />
+
+                                    <TextView
+                                        android:id="@+id/cardCenterTitle"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="12dp"
+                                        android:gravity="center"
+                                        android:fontFamily="@font/sf_pro_bold"
+                                        android:textSize="16sp"
+                                        android:textColor="#FFFFFFFF"
+                                        android:text="Dune: Part Two"
+                                        android:maxLines="4"
+                                        android:ellipsize="end" />
+
+                                    <TextView
+                                        android:id="@+id/cardCenterSub"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="10dp"
+                                        android:fontFamily="@font/sf_pro_medium"
+                                        android:textSize="11sp"
+                                        android:textColor="#B3FFFFFF"
+                                        android:text="Press OK to Spin" />
+                                </LinearLayout>
+                            </FrameLayout>
+                        </FrameLayout>
+
+                        <!-- Slot Reel Pick Result / Countdown View (Pure Card with Name) -->
+                        <LinearLayout
+                            android:id="@+id/slotReelGroup"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:clipChildren="false"
+                            android:clipToPadding="false"
+                            android:visibility="gone">
+
+                            <FrameLayout
+                                android:id="@+id/slotResultCard"
+                                android:layout_width="135dp"
+                                android:layout_height="175dp"
+                                android:elevation="8dp"
+                                android:background="@drawable/card_name_surface"
+                                android:padding="10dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical"
+                                    android:gravity="center">
+
+                                    <TextView
+                                        android:id="@+id/slotResultBadge"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:background="@drawable/label_pill_black_bg"
+                                        android:paddingStart="8dp"
+                                        android:paddingEnd="8dp"
+                                        android:paddingTop="2dp"
+                                        android:paddingBottom="2dp"
+                                        android:fontFamily="@font/sf_pro_bold"
+                                        android:textSize="10sp"
+                                        android:textColor="#FFFFD700"
+                                        android:text="★ SELECTED" />
+
+                                    <TextView
+                                        android:id="@+id/slotResultTitle"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="10dp"
+                                        android:gravity="center"
+                                        android:fontFamily="@font/sf_pro_bold"
+                                        android:textSize="16sp"
+                                        android:textColor="#FFFFFFFF"
+                                        android:text="Solo Leveling"
+                                        android:maxLines="3"
+                                        android:ellipsize="end" />
+                                </LinearLayout>
+                            </FrameLayout>
+
+                            <TextView
+                                android:id="@+id/countdownText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:gravity="center"
+                                android:fontFamily="@font/sf_pro_medium"
+                                android:textSize="14sp"
+                                android:textColor="#FFFFFFFF"
+                                android:text="Opening in 3…" />
+
+                            <ProgressBar
+                                android:id="@+id/countdownProgress"
+                                style="?android:attr/progressBarStyleHorizontal"
+                                android:layout_width="160dp"
+                                android:layout_height="4dp"
+                                android:layout_marginTop="6dp"
+                                android:max="100"
+                                android:progress="100" />
+                        </LinearLayout>
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/moodControlsHint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="6dp"
+                        android:background="@drawable/capsule_black_bg"
+                        android:fontFamily="@font/sf_pro_medium"
+                        android:textSize="13sp"
+                        android:textColor="#FFFFFFFF"
+                        android:text="◄ / ► Left/Right: Skip Mood   |   OK: Pick &amp; Spin" />
+                </LinearLayout>
+
+                <!-- SECTION 4: ALL APPS & UNINSTALL BUTTONS -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/btnMoreApps"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:paddingStart="24dp"
+                        android:paddingEnd="24dp"
+                        android:gravity="center"
+                        android:fontFamily="@font/outfit"
+                        android:textSize="15sp"
+                        android:textColor="#FFFFFFFF"
+                        android:background="@drawable/top_btn_unfocused"
+                        android:defaultFocusHighlightEnabled="false"
+                        android:text="All Apps"
+                        android:focusable="true"
+                        android:clickable="true" />
+
+                    <TextView
+                        android:id="@+id/btnHomeUninstall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layout_marginStart="14dp"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:gravity="center"
+                        android:fontFamily="@font/outfit"
+                        android:textSize="15sp"
+                        android:textColor="#FFFFFFFF"
+                        android:background="@drawable/top_btn_unfocused"
+                        android:defaultFocusHighlightEnabled="false"
+                        android:text="Uninstall"
+                        android:focusable="true"
+                        android:clickable="true" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+    </FrameLayout>
+
+    <!-- Software Dim Overlay (Dims entire launcher smoothly based on Brightness setting) -->
+    <View
+        android:id="@+id/brightnessDimOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FF000000"
+        android:alpha="0.0"
+        android:importantForAccessibility="no"
+        android:focusable="false"
+        android:clickable="false" />
+
+    <!-- Custom Lock Screen (5K Lockscreen, auto-lock after 2min, dismisses on ANY key) -->
+    <FrameLayout
+        android:id="@+id/lockscreenOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/lockscreenWallpaper"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/lockscreen_bg" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#33000000" />
+
+        <!-- Apple Style Centered Date & Time on lockscreen -->
+        <LinearLayout
+            android:id="@+id/lockscreenClockContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginTop="36dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextClock
+                android:id="@+id/lockscreenClock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/sf_pro_bold"
+                android:textSize="128sp"
+                android:textColor="#FFFFFFFF"
+                android:format12Hour="h:mm a"
+                android:format24Hour="HH:mm"
+                android:letterSpacing="-0.02"
+                android:shadowColor="#80000000"
+                android:shadowDx="0"
+                android:shadowDy="4"
+                android:shadowRadius="14"
+                android:includeFontPadding="false" />
+
+            <TextClock
+                android:id="@+id/lockscreenDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:fontFamily="@font/sf_pro_medium"
+                android:textSize="22sp"
+                android:textColor="#E6FFFFFF"
+                android:letterSpacing="0.01"
+                android:format12Hour="EEEE, d MMMM"
+                android:format24Hour="EEEE, d MMMM"
+                android:shadowColor="#80000000"
+                android:shadowDx="0"
+                android:shadowDy="2"
+                android:shadowRadius="8"
+                android:includeFontPadding="false" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <!-- Full-screen More Apps Grid Overlay -->
+    <FrameLayout
+        android:id="@+id/moreAppsOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#F50A0E17"
+        android:visibility="gone">
+
+        <!-- Fixed Top Header pinned with elevation/translationZ so scrolling apps never cover it -->
+        <LinearLayout
+            android:id="@+id/moreAppsHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="48dp"
+            android:paddingEnd="48dp"
+            android:paddingTop="32dp"
+            android:paddingBottom="14dp"
+            android:background="#F50A0E17"
+            android:elevation="14dp"
+            android:translationZ="14dp">
+
+            <LinearLayout
+                android:id="@+id/btnBackFromApps"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:layout_marginStart="4dp"
+                android:paddingStart="18dp"
+                android:paddingEnd="22dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="@drawable/top_btn_unfocused"
+                android:defaultFocusHighlightEnabled="false"
+                android:focusable="true"
+                android:clickable="true">
+
+                <ImageView
+                    android:id="@+id/iconBackFromApps"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_back_arrow"
+                    android:tint="#FFFFFFFF" />
+
+                <TextView
+                    android:id="@+id/textBackFromApps"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:fontFamily="@font/sf_pro_medium"
+                    android:textSize="14sp"
+                    android:textColor="#FFFFFFFF"
+                    android:text="Back to Home" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textAllAppsHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:fontFamily="@font/sf_pro_bold"
+                android:textSize="28sp"
+                android:textColor="#FFFFFFFF"
+                android:text="All Apps" />
+
+            <!-- UNINSTALL BUTTON RIGHT NEXT TO ALL APPS -->
+            <LinearLayout
+                android:id="@+id/btnUninstallApps"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:layout_marginStart="24dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="20dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="@drawable/top_btn_unfocused"
+                android:defaultFocusHighlightEnabled="false"
+                android:focusable="true"
+                android:clickable="true">
+
+                <ImageView
+                    android:id="@+id/iconUninstall"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_delete"
+                    android:tint="#FFFFFFFF" />
+
+                <TextView
+                    android:id="@+id/textUninstall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:fontFamily="@font/sf_pro_medium"
+                    android:textSize="14sp"
+                    android:textColor="#FFFFFFFF"
+                    android:text="Uninstall" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/appsGrid"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="85dp"
+            android:paddingStart="48dp"
+            android:paddingEnd="48dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="48dp"
+            android:clipToPadding="false"
+            android:clipChildren="true" />
+    </FrameLayout>
+
+    <!-- Full-screen Pure Black Screen for Sleep Timer / Screen Off -->
+    <FrameLayout
+        android:id="@+id/screenOffOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FF000000"
+        android:visibility="gone"
+        android:focusable="false"
+        android:clickable="false">
+
+        <TextView
+            android:id="@+id/screenOffText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/sf_pro_medium"
+            android:textSize="14sp"
+            android:textColor="#33FFFFFF"
+            android:text="Screen Off &amp; Audio Mute • Press any button to wake" />
+    </FrameLayout>
+
+</FrameLayout>

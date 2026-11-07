@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="480dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="26dp"
+    android:background="@drawable/dialog_rounded_bg"
+    android:gravity="center_horizontal">
+
+    <ImageView
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:src="@drawable/ic_sleep"
+        android:tint="#FFFFFFFF" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/sf_pro_bold"
+        android:textSize="20sp"
+        android:textColor="#FFFFFFFF"
+        android:text="Sleep Timer" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:fontFamily="@font/sf_pro_bold"
+        android:textSize="13sp"
+        android:textColor="#FFFF2D55"
+        android:text="Screen-Off Mode" />
+
+    <TextView
+        android:layout_width="390dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:fontFamily="@font/sf_pro_medium"
+        android:textSize="12sp"
+        android:textColor="#CCFFFFFF"
+        android:text="This TV powers off completely if the system sleeps it, so the app blanks the screen and mutes audio instead." />
+
+    <TextView
+        android:layout_width="390dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:gravity="center"
+        android:fontFamily="@font/sf_pro_medium"
+        android:textSize="11sp"
+        android:textColor="#80FFFFFF"
+        android:text="Timed sleep blanks the screen and mutes audio on expire. Press any remote key to wake." />
+
+    <View
+        android:layout_width="390dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:background="#26FFFFFF" />
+
+    <!-- Action buttons -->
+    <Button
+        android:id="@+id/btnSleepScreenOffNow"
+        android:layout_width="390dp"
+        android:layout_height="42dp"
+        android:background="@drawable/top_btn_unfocused"
+        android:fontFamily="@font/sf_pro_bold"
+        android:textSize="14sp"
+        android:textColor="#FFFFFFFF"
+        android:text="Screen off (black screen)"
+        android:defaultFocusHighlightEnabled="false"
+        android:focusable="true"
+        android:clickable="true" />
+
+    <Button
+        android:id="@+id/btnSleepCancelTimer"
+        android:layout_width="390dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/top_btn_unfocused"
+        android:fontFamily="@font/sf_pro_bold"
+        android:textSize="14sp"
+        android:textColor="#FFFF2D55"
+        android:text="Cancel timer"
+        android:visibility="gone"
+        android:defaultFocusHighlightEnabled="false"
+        android:focusable="true"
+        android:clickable="true" />
+
+    <LinearLayout
+        android:layout_width="390dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnSleep15"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_weight="1"
+            android:background="@drawable/top_btn_unfocused"
+            android:fontFamily="@font/sf_pro_medium"
+            android:textSize="13sp"
+            android:textColor="#FFFFFFFF"
+            android:text="15 min"
+            android:defaultFocusHighlightEnabled="false"
+            android:focusable="true"
+            android:clickable="true" />
+
+        <Button
+            android:id="@+id/btnSleep30"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/top_btn_unfocused"
+            android:fontFamily="@font/sf_pro_medium"
+            android:textSize="13sp"
+            android:textColor="#FFFFFFFF"
+            android:text="30 min"
+            android:defaultFocusHighlightEnabled="false"
+            android:focusable="true"
+            android:clickable="true" />
+
+        <Button
+            android:id="@+id/btnSleep60"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/top_btn_unfocused"
+            android:fontFamily="@font/sf_pro_medium"
+            android:textSize="13sp"
+            android:textColor="#FFFFFFFF"
+            android:text="60 min"
+            android:defaultFocusHighlightEnabled="false"
+            android:focusable="true"
+            android:clickable="true" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="390dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnSleep90"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_weight="1"
+            android:background="@drawable/top_btn_unfocused"
+            android:fontFamily="@font/sf_pro_medium"
+            android:textSize="13sp"
+            android:textColor="#FFFFFFFF"
+            android:text="90 min"
+            android:defaultFocusHighlightEnabled="false"
+            android:focusable="true"
+            android:clickable="true" />
+
+        <Button
+            android:id="@+id/btnSleep120"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/top_btn_unfocused"
+            android:fontFamily="@font/sf_pro_medium"
+            android:textSize="13sp"
+            android:textColor="#FFFFFFFF"
+            android:text="120 min"
+            android:defaultFocusHighlightEnabled="false"
+            android:focusable="true"
+            android:clickable="true" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnCloseSleep"
+        android:layout_width="160dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/top_btn_unfocused"
+        android:fontFamily="@font/sf_pro_medium"
+        android:textSize="14sp"
+        android:textColor="#FFFFFFFF"
+        android:text="Close"
+        android:defaultFocusHighlightEnabled="false"
+        android:focusable="true"
+        android:clickable="true" />
+
+</LinearLayout>
+

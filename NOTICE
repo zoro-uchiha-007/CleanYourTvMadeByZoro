@@ -1,0 +1,59 @@
+CleanYourTV
+Copyright (c) 2026 Gathin
+Copyright (c) 2026 zoro-uchiha-007
+
+This project incorporates components, libraries, fonts, and data from the following third-party sources:
+
+1. CleanYourTV (Upstream Project)
+   - Source: https://github.com/Gathin23/cleanyourtv
+   - License: MIT License
+   - Copyright: (c) 2026 Gathin
+
+2. Outfit Font Family
+   - Source: https://github.com/Outfitio/Outfit-Fonts
+   - License: SIL Open Font License, Version 1.1 (OFL-1.1)
+   - Copyright: (c) 2021 The Outfit Project Authors
+   - Full text: See launcher/FONT-LICENSE-OFL.txt
+
+3. Fluent Emoji 3D
+   - Source: https://github.com/microsoft/fluentui-emoji
+   - License: MIT License
+   - Copyright: (c) Microsoft Corporation
+   - Full text: See launcher/ICONS-LICENSE-FLUENT-EMOJI.txt
+
+4. Android Jetpack (AndroidX)
+   - Components: androidx.recyclerview:recyclerview, androidx.dynamicanimation:dynamicanimation
+   - Source: https://android.googlesource.com/platform/frameworks/support
+   - License: Apache License, Version 2.0
+   - Copyright: (c) The Android Open Source Project
+
+5. TVMaze API (Data Source)
+   - Source: https://www.tvmaze.com / https://api.tvmaze.com
+   - License: Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+   - Terms & Attribution: Data provided by TVmaze.com. TVmaze requires credit as the data source:
+     "This product uses the TVmaze API but is not endorsed or certified by TVmaze. TV data licensed under CC BY-SA 4.0."
+     Website: https://www.tvmaze.com
+
+6. Kitsu API (Data Source)
+   - Source: https://kitsu.io / https://kitsu.io/api/edge
+   - Terms: Kitsu Terms of Service (https://kitsu.io/terms)
+   - Terms & Attribution: Anime metadata queried via Kitsu API.
+     "Powered by Kitsu."
+     Website: https://kitsu.io
+
+7. Open-Meteo Weather API (Data Source)
+   - Source: https://open-meteo.com
+   - License: Creative Commons Attribution 4.0 International (CC BY 4.0)
+   - Terms & Attribution: Open-Meteo allows free non-commercial and open-source usage with attribution:
+     "Weather data by Open-Meteo.com (CC BY 4.0)"
+     Website: https://open-meteo.com/
+
+--------------------------------------------------------------------------------
+TRADEMARK AND AFFILIATION DISCLAIMER:
+All product names, logos, brands, trademarks, and registered trademarks mentioned
+in this project and documentation are property of their respective owners.
+All company, product, and service names (including Xiaomi, Mi, Google, Android,
+Android TV, Netflix, Amazon Prime Video, Disney, Hotstar, CloudStream, SmartTube,
+and MX Player) are used strictly for identification and compatibility purposes only.
+Use of these names, logos, and brands does not imply endorsement, affiliation,
+or sponsorship by any of the respective trademark holders.

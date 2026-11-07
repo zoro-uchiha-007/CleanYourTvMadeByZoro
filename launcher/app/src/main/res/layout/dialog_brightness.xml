@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="480dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="@drawable/dialog_rounded_bg"
+    android:gravity="center_horizontal">
+
+    <ImageView
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:src="@drawable/ic_brightness"
+        android:tint="#FFFFFFFF" />
+
+    <TextView
+        android:id="@+id/dialogBrightnessTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/sf_pro_bold"
+        android:textSize="18sp"
+        android:textColor="#FFFFFFFF"
+        android:text="Display &amp; Wallpapers" />
+
+    <TextView
+        android:id="@+id/dialogBrightnessLevel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/sf_pro_bold"
+        android:textSize="32sp"
+        android:textColor="#FFFF2D55"
+        android:text="80%" />
+
+    <TextView
+        android:id="@+id/dialogBrightnessSub"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:fontFamily="@font/sf_pro_medium"
+        android:textSize="11sp"
+        android:textColor="#B3FFFFFF"
+        android:text="Press Left / Right to adjust brightness in 10% steps" />
+
+    <LinearLayout
+        android:id="@+id/rowBrightnessSelector"
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:padding="8dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@drawable/top_btn_unfocused"
+        android:defaultFocusHighlightEnabled="false"
+        android:focusable="true"
+        android:clickable="true">
+
+        <ProgressBar
+            android:id="@+id/brightnessSeekBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="350dp"
+            android:layout_height="12dp"
+            android:max="100"
+            android:progress="80"
+            android:progressTint="#FFFF2D55"
+            android:progressBackgroundTint="#40FFFFFF" />
+
+        <LinearLayout
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/outfit"
+                android:textSize="11sp"
+                android:textColor="#80FFFFFF"
+                android:text="10% Min" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/outfit"
+                android:textSize="11sp"
+                android:textColor="#80FFFFFF"
+                android:text="100% Max" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="380dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="8dp"
+        android:background="#26FFFFFF" />
+
+    <!-- Home Wallpaper Row Header -->
+    <TextView
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/sf_pro_bold"
+        android:textSize="13sp"
+        android:textColor="#FFFFFFFF"
+        android:text="Home Wallpaper" />
+
+    <!-- Home Wallpaper Selector -->
+    <LinearLayout
+        android:id="@+id/rowWallpaperSelector"
+        android:layout_width="380dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="6dp"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/top_btn_unfocused"
+        android:defaultFocusHighlightEnabled="false"
+        android:focusable="true"
+        android:clickable="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/sf_pro_bold"
+            android:textSize="15sp"
+            android:textColor="#FFFF2D55"
+            android:text="◄" />
+
+        <TextView
+            android:id="@+id/dialogWallpaperName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:fontFamily="@font/sf_pro_bold"
+            android:textSize="13sp"
+            android:textColor="#FFFFFFFF"
+            android:text="Wallpaper 1" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/sf_pro_bold"
+            android:textSize="15sp"
+            android:textColor="#FFFF2D55"
+            android:text="►" />
+    </LinearLayout>
+
+    <!-- Home Auto Button in its own line below selector -->
+    <Button
+        android:id="@+id/btnToggleHomeDynamic"
+        android:layout_width="380dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="6dp"
+        android:background="@drawable/top_btn_unfocused"
+        android:fontFamily="@font/sf_pro_medium"
+        android:textSize="12sp"
+        android:textColor="#FFFFFFFF"
+        android:text="Auto: OFF"
+        android:defaultFocusHighlightEnabled="false"
+        android:focusable="true"
+        android:clickable="true" />
+
+    <!-- Lock Screen Wallpaper Row Header -->
+    <TextView
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/sf_pro_bold"
+        android:textSize="13sp"
+        android:textColor="#FFFFFFFF"
+        android:text="Lock Screen Wallpaper" />
+
+    <!-- Lock Wallpaper Selector -->
+    <LinearLayout
+        android:id="@+id/rowLockWallpaperSelector"
+        android:layout_width="380dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="6dp"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/top_btn_unfocused"
+        android:defaultFocusHighlightEnabled="false"
+        android:focusable="true"
+        android:clickable="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/sf_pro_bold"
+            android:textSize="15sp"
+            android:textColor="#FFFF2D55"
+            android:text="◄" />
+
+        <TextView
+            android:id="@+id/dialogLockWallpaperName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:fontFamily="@font/sf_pro_bold"
+            android:textSize="13sp"
+            android:textColor="#FFFFFFFF"
+            android:text="Lockscreen Wallpaper" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/sf_pro_bold"
+            android:textSize="15sp"
+            android:textColor="#FFFF2D55"
+            android:text="►" />
+    </LinearLayout>
+
+    <!-- Lock Auto Button in its own line below selector -->
+    <Button
+        android:id="@+id/btnToggleLockDynamic"
+        android:layout_width="380dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="6dp"
+        android:background="@drawable/top_btn_unfocused"
+        android:fontFamily="@font/sf_pro_medium"
+        android:textSize="12sp"
+        android:textColor="#FFFFFFFF"
+        android:text="Auto: OFF"
+        android:defaultFocusHighlightEnabled="false"
+        android:focusable="true"
+        android:clickable="true" />
+
+    <Button
+        android:id="@+id/btnDoneBrightness"
+        android:layout_width="160dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="14dp"
+        android:background="@drawable/top_btn_unfocused"
+        android:fontFamily="@font/sf_pro_medium"
+        android:textSize="13sp"
+        android:textColor="#FFFFFFFF"
+        android:text="Done"
+        android:defaultFocusHighlightEnabled="false"
+        android:focusable="true"
+        android:clickable="true" />
+
+</LinearLayout>

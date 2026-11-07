@@ -1,0 +1,112 @@
+[
+  {
+    "filename": "wallpaper_01.jpg",
+    "title": "Wallpaper 1",
+    "clock_lum": 214.6,
+    "topbar_lum": 222.2,
+    "dock_lum": 115.5,
+    "bot_lum": 139.3,
+    "light_text": false,
+    "scrim_alpha": 0.35
+  },
+  {
+    "filename": "wallpaper_02.jpg",
+    "title": "Wallpaper 2",
+    "clock_lum": 80.3,
+    "topbar_lum": 227.0,
+    "dock_lum": 100.2,
+    "bot_lum": 108.2,
+    "light_text": true,
+    "scrim_alpha": 0.0
+  },
+  {
+    "filename": "wallpaper_03.jpg",
+    "title": "Wallpaper 3",
+    "clock_lum": 101.9,
+    "topbar_lum": 102.9,
+    "dock_lum": 149.5,
+    "bot_lum": 95.5,
+    "light_text": true,
+    "scrim_alpha": 0.0
+  },
+  {
+    "filename": "wallpaper_04.jpg",
+    "title": "Wallpaper 4",
+    "clock_lum": 0.0,
+    "topbar_lum": 0.0,
+    "dock_lum": 6.9,
+    "bot_lum": 0.3,
+    "light_text": true,
+    "scrim_alpha": 0.0
+  },
+  {
+    "filename": "wallpaper_05.jpg",
+    "title": "Wallpaper 5",
+    "clock_lum": 184.9,
+    "topbar_lum": 160.3,
+    "dock_lum": 60.3,
+    "bot_lum": 32.6,
+    "light_text": false,
+    "scrim_alpha": 0.25
+  },
+  {
+    "filename": "wallpaper_06.jpg",
+    "title": "Wallpaper 6",
+    "clock_lum": 23.4,
+    "topbar_lum": 18.7,
+    "dock_lum": 43.5,
+    "bot_lum": 26.5,
+    "light_text": true,
+    "scrim_alpha": 0.0
+  },
+  {
+    "filename": "wallpaper_07.jpg",
+    "title": "Wallpaper 7",
+    "clock_lum": 41.8,
+    "topbar_lum": 63.9,
+    "dock_lum": 62.7,
+    "bot_lum": 55.6,
+    "light_text": true,
+    "scrim_alpha": 0.0
+  },
+  {
+    "filename": "wallpaper_08.jpg",
+    "title": "Wallpaper 8",
+    "clock_lum": 71.6,
+    "topbar_lum": 95.2,
+    "dock_lum": 117.0,
+    "bot_lum": 83.1,
+    "light_text": true,
+    "scrim_alpha": 0.0
+  },
+  {
+    "filename": "wallpaper_09.jpg",
+    "title": "Wallpaper 9",
+    "clock_lum": 255.0,
+    "topbar_lum": 254.6,
+    "dock_lum": 183.3,
+    "bot_lum": 226.5,
+    "light_text": false,
+    "scrim_alpha": 0.35
+  },
+  {
+    "filename": "wallpaper_10.jpg",
+    "title": "Wallpaper 10",
+    "clock_lum": 2.0,
+    "topbar_lum": 7.5,
+    "dock_lum": 11.9,
+    "bot_lum": 3.4,
+    "light_text": true,
+    "scrim_alpha": 0.0
+  },
+  {
+    "filename": "wallpaper_11.jpg",
+    "title": "Wallpaper 11",
+    "clock_lum": 100.2,
+    "topbar_lum": 103.9,
+    "dock_lum": 135.5,
+    "bot_lum": 133.1,
+    "light_text": true,
+    "scrim_alpha": 0.0
+  }
+]
